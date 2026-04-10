@@ -1,1 +1,27 @@
 @import "tailwindcss";
+
+@theme {
+    /* Mengganti Font Global ke stack Humanist yang lebih bersih */
+    --font-sans: 'Inter UI', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    
+    /* Menambahkan custom palette Biru yang lebih dalam */
+    --color-primary-50: #f0f9ff;
+    --color-primary-100: #e0f2fe;
+    --color-primary-500: #0ea5e9; /* Sky Blue untuk aksen ringan */
+    --color-primary-600: #0284c7;
+    --color-primary-700: #0369a1; /* Biru utama untuk tombol/judul */
+    --color-primary-800: #075985;
+    --color-primary-950: #082f49; /* Biru gelap untuk header/text */
+}
+
+/* Custom CSS tambahan (Sedikit saja agar tetap ringan) */
+@layer base {
+    body {
+        @apply antialiased tracking-tight;
+        font-feature-settings: "cv02", "cv03", "cv04", "cv11"; /* Fitur Inter UI untuk kebersihan text */
+    }
+    
+    h1, h2, h3, h4 {
+        @apply tracking-tighter;
+    }
+}
