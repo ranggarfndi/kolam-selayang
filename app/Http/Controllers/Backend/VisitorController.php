@@ -13,18 +13,19 @@ class VisitorController extends Controller
     {
         $today = Carbon::today();
         
-        // Ambil semua log hari ini, urutkan dari yang terbaru
-        $logs = VisitorLog::whereDate('created_at', $today)->latest()->get();
+        // 1. QUERY UNTUK STATISTIK (Ambil semua data hari ini tanpa paginate)
+        $allTodayLogs = VisitorLog::whereDate('created_at', $today)->get();
         
-        // Kalkulasi Statistik
-        $totalIn = $logs->where('type', 'in')->sum('quantity');
-        $totalOut = $logs->where('type', 'out')->sum('quantity');
-        
-        // Mencegah minus jika ada kesalahan input admin
+        $totalIn = $allTodayLogs->where('type', 'in')->sum('quantity');
+        $totalOut = $allTodayLogs->where('type', 'out')->sum('quantity');
         $currentInside = max(0, $totalIn - $totalOut); 
-        
-        // Pendapatan hanya dari pengunjung masuk
-        $todayRevenue = $logs->where('type', 'in')->sum('total_price');
+        $todayRevenue = $allTodayLogs->where('type', 'in')->sum('total_price');
+
+        // 2. QUERY UNTUK TABEL (Menggunakan Pagination)
+        // Kita tampilkan 15 log per halaman agar admin mudah memantau
+        $logs = VisitorLog::whereDate('created_at', $today)
+                            ->latest()
+                            ->paginate(15);
 
         return view('backend.visitors.index', compact(
             'logs', 'currentInside', 'todayRevenue', 'totalIn', 'totalOut'
@@ -38,10 +39,7 @@ class VisitorController extends Controller
             'quantity' => 'required|integer|min:1'
         ]);
 
-        // Harga statis sesuai spesifikasi
         $pricePerTicket = 10000;
-        
-        // Total harga hanya dihitung jika tipe 'in' (Masuk)
         $totalPrice = $request->type === 'in' ? ($request->quantity * $pricePerTicket) : 0;
 
         VisitorLog::create([

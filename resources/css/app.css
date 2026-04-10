@@ -16,6 +16,10 @@
 
 /* Custom CSS tambahan (Sedikit saja agar tetap ringan) */
 @layer base {
+    html {
+        scroll-behavior: smooth;
+    }
+    
     body {
         @apply antialiased tracking-tight;
         font-feature-settings: "cv02", "cv03", "cv04", "cv11"; /* Fitur Inter UI untuk kebersihan text */

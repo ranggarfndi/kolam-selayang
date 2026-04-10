@@ -12,15 +12,18 @@ class ReportController extends Controller
 {
     public function index(Request $request)
     {
-        // Default filter: 7 hari terakhir jika tidak ada input
+        // 1. Default filter
         $startDate = $request->input('start_date', Carbon::today()->subDays(6)->toDateString());
         $endDate = $request->input('end_date', Carbon::today()->toDateString());
 
-        $reports = $this->getReportData($startDate, $endDate);
+        // 2. Ambil data mentah untuk SUMMARY (Semua data dalam range tanpa paginate)
+        $rawReports = $this->getReportData($startDate, $endDate)->get();
+        $totalVisitors = $rawReports->sum('total_visitors');
+        $totalRevenue = $rawReports->sum('total_revenue');
 
-        // Kalkulasi Total untuk Summary
-        $totalVisitors = $reports->sum('total_visitors');
-        $totalRevenue = $reports->sum('total_revenue');
+        // 3. Ambil data untuk TABEL (Dengan Paginate)
+        // Kita gunakan 10 atau 31 (sebulan) agar rapi
+        $reports = $this->getReportData($startDate, $endDate)->paginate(15)->withQueryString();
 
         return view('backend.reports.index', compact('reports', 'startDate', 'endDate', 'totalVisitors', 'totalRevenue'));
     }
@@ -30,10 +33,10 @@ class ReportController extends Controller
         $startDate = $request->input('start_date');
         $endDate = $request->input('end_date');
 
-        $reports = $this->getReportData($startDate, $endDate);
+        // Untuk ekspor, kita ambil SEMUA data (get)
+        $reports = $this->getReportData($startDate, $endDate)->get();
 
         $fileName = "laporan-kolam-selayang-{$startDate}-sd-{$endDate}.csv";
-
         $headers = [
             "Content-type"        => "text/csv",
             "Content-Disposition" => "attachment; filename=$fileName",
@@ -56,24 +59,21 @@ class ReportController extends Controller
                 ]);
             }
 
-            // Tambahkan baris total di bawah
             fputcsv($file, ['', '', '']);
             fputcsv($file, ['TOTAL KESELURUHAN', $reports->sum('total_visitors'), $reports->sum('total_revenue')]);
-            
             fclose($file);
         };
 
         return Response::stream($callback, 200, $headers);
     }
 
-    // Fungsi helper agar query tidak diulang
+    // Helper diubah agar mengembalikan Query Builder (tanpa ->get() di akhir)
     private function getReportData($startDate, $endDate)
     {
         return VisitorLog::selectRaw('DATE(created_at) as date, SUM(quantity) as total_visitors, SUM(total_price) as total_revenue')
-            ->where('type', 'in') // Hanya hitung yang masuk untuk laporan ini
+            ->where('type', 'in')
             ->whereBetween('created_at', [$startDate . ' 00:00:00', $endDate . ' 23:59:59'])
             ->groupBy('date')
-            ->orderBy('date', 'desc')
-            ->get();
+            ->orderBy('date', 'desc');
     }
 }
