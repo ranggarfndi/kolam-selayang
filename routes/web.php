@@ -29,4 +29,8 @@ Route::middleware('auth')->prefix('admin')->group(function () {
     // Modul Pengunjung
     Route::get('/visitors', [App\Http\Controllers\Backend\VisitorController::class, 'index'])->name('admin.visitors');
     Route::post('/visitors', [App\Http\Controllers\Backend\VisitorController::class, 'store'])->name('admin.visitors.store');
+
+    // Modul Laporan
+    Route::get('/reports', [App\Http\Controllers\Backend\ReportController::class, 'index'])->name('admin.reports');
+    Route::get('/reports/export', [App\Http\Controllers\Backend\ReportController::class, 'exportCsv'])->name('admin.reports.export');
 });

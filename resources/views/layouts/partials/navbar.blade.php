@@ -19,6 +19,7 @@
                 @auth
                     <div class="h-5 w-px bg-gray-300"></div>
                     <a href="{{ url('/admin/dashboard') }}" class="text-primary-700 hover:text-primary-800 text-sm font-bold transition">Dashboard Admin</a>
+                    <a href="{{ route('admin.reports') }}" class="text-primary-700 hover:text-primary-800 text-sm font-bold whitespace-nowrap transition">Laporan</a>
                     <form method="POST" action="{{ route('logout') }}" class="inline">
                         @csrf
                         <button type="submit" class="text-red-500 hover:text-red-700 text-sm font-bold transition">Keluar</button>
@@ -47,6 +48,7 @@
             @auth
                 <div class="border-t border-gray-100 my-3 pt-3"></div>
                 <a href="{{ url('/admin/dashboard') }}" class="block px-4 py-2.5 rounded-lg text-base font-bold text-primary-700 hover:bg-primary-50 transition">Dashboard Admin</a>
+                <a href="{{ route('admin.reports') }}" class="text-primary-700 hover:text-primary-800 text-sm font-bold whitespace-nowrap transition">Laporan</a>
                 <form method="POST" action="{{ route('logout') }}" class="block w-full">
                     @csrf
                     <button type="submit" class="w-full text-left px-4 py-2.5 rounded-lg text-base font-bold text-red-500 hover:bg-red-50 hover:text-red-700 transition">Keluar</button>
