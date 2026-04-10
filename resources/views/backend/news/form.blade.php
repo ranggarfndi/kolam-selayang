@@ -2,7 +2,7 @@
 @section('title', isset($news) ? 'Edit Berita' : 'Tulis Berita Baru')
 
 @section('content')
-<div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+<div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10 md:py-16">
     
     <div class="mb-8 flex items-center justify-between">
         <div>

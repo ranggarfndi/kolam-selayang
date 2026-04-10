@@ -2,11 +2,13 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\FrontendController;
 
-// Halaman Frontend Sementara
-Route::get('/', function () {
-    return view('layouts.main'); 
-});
+// Halaman Publik (Frontend)
+Route::get('/', [FrontendController::class, 'index'])->name('home');
+Route::get('/berita', [FrontendController::class, 'newsIndex'])->name('news.index');
+// Perhatikan {news:slug} agar URL menggunakan slug, bukan ID angka
+Route::get('/berita/{news:slug}', [FrontendController::class, 'newsShow'])->name('news.show');
 
 // Autentikasi
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login')->middleware('guest');

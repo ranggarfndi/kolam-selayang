@@ -2,7 +2,7 @@
 @section('title', 'Manajemen Berita - Kolam Selayang')
 
 @section('content')
-<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 md:py-16">
     
     <div class="mb-8 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
@@ -65,6 +65,9 @@
                     @endforelse
                 </tbody>
             </table>
+        </div>
+        <div class="px-6 py-6 border-t border-gray-50">
+            {{ $news->links('layouts.partials.pagination') }}
         </div>
     </div>
 

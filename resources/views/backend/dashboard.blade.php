@@ -2,61 +2,67 @@
 @section('title', 'Dashboard Utama Administrator - Kolam Selayang')
 
 @section('content')
-<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 md:py-16">
     
-    <div class="bg-white p-8 md:p-12 rounded-3xl shadow-sm border border-gray-100 mb-10">
-        <div class="md:flex md:items-center md:justify-between gap-6">
+    <div class="bg-primary-950 p-8 md:p-12 rounded-[2.5rem] shadow-2xl shadow-primary-900/20 mb-10 relative overflow-hidden">
+        <div class="absolute top-0 right-0 w-64 h-64 bg-primary-800 rounded-full blur-3xl opacity-20 -translate-y-1/2 translate-x-1/2"></div>
+        
+        <div class="relative z-10 md:flex md:items-center md:justify-between gap-6 text-white">
             <div>
-                <h1 class="text-4xl font-extrabold text-primary-950 tracking-tighter">
-                    Selamat Datang kembali, <span class="text-primary-700">{{ Auth::user()->name }}!</span>
+                <h1 class="text-4xl font-extrabold tracking-tighter leading-tight">
+                    Selamat Datang kembali, <br>
+                    <span class="text-sky-400">{{ Auth::user()->name }}!</span>
                 </h1>
-                <p class="text-gray-600 mt-2 text-lg">Anda memiliki kendali penuh atas sistem operasional Kolam Selayang Medan hari ini.</p>
+                <p class="text-primary-200 mt-2 text-lg">Kelola operasional, pengunjung, dan laporan Kolam Selayang hari ini.</p>
             </div>
             <div class="mt-6 md:mt-0">
-                <span class="text-sm font-semibold text-gray-500">{{ date('d M Y') }}</span>
+                <div class="bg-white/10 backdrop-blur-md px-6 py-4 rounded-3xl border border-white/10 text-center">
+                    <span class="block text-[10px] font-black uppercase tracking-[0.2em] text-primary-300 mb-1">Tanggal Sistem</span>
+                    <span class="text-xl font-bold">{{ date('d M Y') }}</span>
+                </div>
             </div>
         </div>
     </div>
 
     <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
         
-        <a href="{{ route('admin.pools') }}" class="bg-white p-8 rounded-3xl shadow-sm border border-gray-100 flex items-start gap-5 hover:border-primary-300 hover:shadow-md transition cursor-pointer group">
-            <div class="p-3.5 bg-sky-100 text-sky-700 rounded-2xl group-hover:bg-primary-600 group-hover:text-white transition">
+        <a href="{{ route('admin.pools') }}" class="bg-white p-8 rounded-3xl shadow-sm border border-gray-100 flex flex-col gap-6 hover:border-sky-300 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group">
+            <div class="p-3.5 bg-sky-100 text-sky-700 rounded-2xl w-fit group-hover:bg-sky-600 group-hover:text-white transition-colors duration-300">
                 <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 002-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
             </div>
             <div>
-                <p class="text-gray-600 text-sm font-medium">Status Kolam</p>
-                <p class="text-xl font-bold text-gray-900 mt-1">Kelola Status &rarr;</p>
+                <p class="text-gray-400 text-[10px] font-black uppercase tracking-[0.2em] mb-1">Operasional</p>
+                <p class="text-xl font-bold text-gray-900">Status Kolam &rarr;</p>
             </div>
         </a>
         
-        <a href="{{ route('admin.visitors') }}" class="bg-white p-8 rounded-3xl shadow-sm border border-gray-100 flex items-start gap-5 hover:border-green-300 hover:shadow-md transition cursor-pointer group">
-            <div class="p-3.5 bg-green-100 text-green-700 rounded-2xl group-hover:bg-green-600 group-hover:text-white transition">
+        <a href="{{ route('admin.visitors') }}" class="bg-white p-8 rounded-3xl shadow-sm border border-gray-100 flex flex-col gap-6 hover:border-green-300 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group">
+            <div class="p-3.5 bg-green-100 text-green-700 rounded-2xl w-fit group-hover:bg-green-600 group-hover:text-white transition-colors duration-300">
                 <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
             </div>
             <div>
-                <p class="text-gray-600 text-sm font-medium">Pengunjung & Tiket</p>
-                <p class="text-xl font-bold text-gray-900 mt-1">Kelola Data &rarr;</p>
+                <p class="text-gray-400 text-[10px] font-black uppercase tracking-[0.2em] mb-1">Log Harian</p>
+                <p class="text-xl font-bold text-gray-900">Pengunjung &rarr;</p>
             </div>
         </a>
 
-        <a href="{{ route('admin.reports') }}" class="bg-white p-8 rounded-3xl shadow-sm border border-gray-100 flex items-start gap-5 hover:border-yellow-300 hover:shadow-md transition cursor-pointer group">
-            <div class="p-3.5 bg-yellow-100 text-yellow-700 rounded-2xl group-hover:bg-yellow-600 group-hover:text-white transition">
+        <a href="{{ route('admin.reports') }}" class="bg-white p-8 rounded-3xl shadow-sm border border-gray-100 flex flex-col gap-6 hover:border-yellow-300 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group">
+            <div class="p-3.5 bg-yellow-100 text-yellow-700 rounded-2xl w-fit group-hover:bg-yellow-600 group-hover:text-white transition-colors duration-300">
                 <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
             </div>
             <div>
-                <p class="text-gray-600 text-sm font-medium">Laporan Rekap</p>
-                <p class="text-xl font-bold text-gray-900 mt-1">Unduh Data &rarr;</p>
+                <p class="text-gray-400 text-[10px] font-black uppercase tracking-[0.2em] mb-1">Data Rekap</p>
+                <p class="text-xl font-bold text-gray-900">Laporan &rarr;</p>
             </div>
         </a>
         
-        <a href="{{ route('admin.news.index') }}" class="bg-white p-8 rounded-3xl shadow-sm border border-gray-100 flex items-start gap-5 hover:border-primary-300 hover:shadow-md transition cursor-pointer group">
-            <div class="p-3.5 bg-primary-100 text-primary-700 rounded-2xl group-hover:bg-primary-600 group-hover:text-white transition">
+        <a href="{{ route('admin.news.index') }}" class="bg-white p-8 rounded-3xl shadow-sm border border-gray-100 flex flex-col gap-6 hover:border-primary-300 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group">
+            <div class="p-3.5 bg-primary-100 text-primary-700 rounded-2xl w-fit group-hover:bg-primary-600 group-hover:text-white transition-colors duration-300">
                 <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"></path></svg>
             </div>
             <div>
-                <p class="text-gray-600 text-sm font-medium">Berita Terbaru</p>
-                <p class="text-xl font-bold text-gray-900 mt-1">Kelola Berita &rarr;</p>
+                <p class="text-gray-400 text-[10px] font-black uppercase tracking-[0.2em] mb-1">Publikasi</p>
+                <p class="text-xl font-bold text-gray-900">Kelola Berita &rarr;</p>
             </div>
         </a>
 

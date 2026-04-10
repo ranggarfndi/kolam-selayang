@@ -2,9 +2,9 @@
 @section('title', 'Manajemen Status Kolam - Kolam Selayang')
 
 @section('content')
-<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 md:py-16">
     
-    <div class="mb-8 flex items-center justify-between">
+    <div class="mb-10 flex items-center justify-between">
         <div>
             <h1 class="text-3xl font-extrabold text-primary-950 tracking-tighter">Manajemen Kolam</h1>
             <p class="text-gray-600 mt-1">Kelola status operasional dan jam buka Kolam Selayang.</p>

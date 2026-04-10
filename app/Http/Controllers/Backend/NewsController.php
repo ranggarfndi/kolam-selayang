@@ -13,11 +13,16 @@ class NewsController extends Controller
 {
     public function index()
     {
-        // Ambil berita terbaru beserta relasi admin yang memposting
-        $news = News::with('author')->latest()->get();
+        // GANTI: Dari get() menjadi paginate(10)
+        // Kita gunakan 10 baris per halaman agar tabel admin tetap rapi dan cepat di-load
+        $news = News::with('author')->latest()->paginate(10);
+        
         return view('backend.news.index', compact('news'));
     }
 
+    // Fungsi create, store, edit, update, dan destroy tetap sama seperti sebelumnya 
+    // (Sudah bagus logikanya)
+    
     public function create()
     {
         return view('backend.news.form');
@@ -28,16 +33,15 @@ class NewsController extends Controller
         $request->validate([
             'title' => 'required|string|max:255',
             'content' => 'required|string',
-            'thumbnail' => 'required|image|mimes:jpeg,png,jpg|max:2048', // Maksimal 2MB
+            'thumbnail' => 'required|image|mimes:jpeg,png,jpg|max:2048',
         ]);
 
-        // Proses Upload Gambar
         $thumbnailPath = $request->file('thumbnail')->store('news', 'public');
 
         News::create([
             'user_id' => Auth::id(),
             'title' => $request->title,
-            'slug' => Str::slug($request->title) . '-' . time(), // Mencegah slug ganda
+            'slug' => Str::slug($request->title) . '-' . time(),
             'content' => $request->content,
             'thumbnail' => $thumbnailPath,
             'published_at' => now(),
@@ -61,13 +65,15 @@ class NewsController extends Controller
 
         $data = [
             'title' => $request->title,
-            'slug' => Str::slug($request->title) . '-' . time(),
             'content' => $request->content,
         ];
 
-        // Jika upload thumbnail baru
+        // Opsional: Hanya update slug jika judul berubah
+        if($news->title !== $request->title) {
+            $data['slug'] = Str::slug($request->title) . '-' . time();
+        }
+
         if ($request->hasFile('thumbnail')) {
-            // Hapus gambar lama
             if ($news->thumbnail) {
                 Storage::disk('public')->delete($news->thumbnail);
             }
@@ -81,7 +87,6 @@ class NewsController extends Controller
 
     public function destroy(News $news)
     {
-        // Hapus gambar fisik
         if ($news->thumbnail) {
             Storage::disk('public')->delete($news->thumbnail);
         }
