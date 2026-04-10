@@ -18,7 +18,7 @@
         </div>
     </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+    <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
         
         <a href="{{ route('admin.pools') }}" class="bg-white p-8 rounded-3xl shadow-sm border border-gray-100 flex items-start gap-5 hover:border-primary-300 hover:shadow-md transition cursor-pointer group">
             <div class="p-3.5 bg-sky-100 text-sky-700 rounded-2xl group-hover:bg-primary-600 group-hover:text-white transition">
@@ -37,6 +37,16 @@
             <div>
                 <p class="text-gray-600 text-sm font-medium">Pengunjung & Tiket</p>
                 <p class="text-xl font-bold text-gray-900 mt-1">Kelola Data &rarr;</p>
+            </div>
+        </a>
+
+        <a href="{{ route('admin.reports') }}" class="bg-white p-8 rounded-3xl shadow-sm border border-gray-100 flex items-start gap-5 hover:border-yellow-300 hover:shadow-md transition cursor-pointer group">
+            <div class="p-3.5 bg-yellow-100 text-yellow-700 rounded-2xl group-hover:bg-yellow-600 group-hover:text-white transition">
+                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+            </div>
+            <div>
+                <p class="text-gray-600 text-sm font-medium">Laporan Rekap</p>
+                <p class="text-xl font-bold text-gray-900 mt-1">Unduh Data &rarr;</p>
             </div>
         </a>
         
