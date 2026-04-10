@@ -9,7 +9,7 @@
             <h1 class="text-3xl font-extrabold text-primary-950 tracking-tighter">{{ isset($news) ? 'Edit Berita' : 'Tulis Berita Baru' }}</h1>
         </div>
         <a href="{{ route('admin.news.index') }}" class="bg-white border border-gray-200 text-gray-700 hover:bg-gray-50 px-4 py-2 rounded-xl text-sm font-bold transition shadow-sm">
-            Batal & Kembali
+            Batal
         </a>
     </div>
 

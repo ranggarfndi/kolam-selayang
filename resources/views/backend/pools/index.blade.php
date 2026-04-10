@@ -26,9 +26,6 @@
         <div class="lg:col-span-2 space-y-8">
             
             <div class="bg-white p-8 rounded-3xl shadow-sm border border-gray-100 relative overflow-hidden">
-                <div class="absolute top-0 right-0 p-8 opacity-5">
-                    <svg class="w-32 h-32" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
-                </div>
                 <h2 class="text-xl font-bold text-primary-950 mb-4 relative z-10">Ubah Semua Status Sekaligus</h2>
                 <form action="{{ route('admin.pools.bulk') }}" method="POST" class="flex flex-wrap gap-3 relative z-10">
                     @csrf

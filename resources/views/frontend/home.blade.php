@@ -33,9 +33,11 @@
                 </div>
             </div>
 
-            <div class="w-full lg:w-2/5 hidden lg:flex justify-center relative">
-                <div class="absolute inset-0 bg-sky-400/20 blur-[60px] rounded-full"></div>
-                <div class="bg-white/10 backdrop-blur-xl border border-white/20 p-8 rounded-[2.5rem] shadow-2xl transform rotate-3 hover:rotate-0 transition-transform duration-500 w-full max-w-sm relative z-10">
+            <div class="w-full lg:w-2/5 lg:flex justify-center relative">
+                <div class="absolute inset-0 bg-gradient-to-tr from-sky-400 to-primary-500 rounded-[2.5rem] blur-xl opacity-20 group-hover:opacity-40 transition duration-700"></div>
+                
+                <div class="relative bg-white/10 backdrop-blur-2xl border border-white/20 p-8 rounded-[2.5rem] shadow-2xl">
+                    
                     <div class="flex justify-between items-center mb-8">
                         <div class="w-14 h-14 rounded-full bg-gradient-to-br from-sky-400 to-primary-600 flex items-center justify-center shadow-lg shadow-sky-500/20">
                             <svg class="w-7 h-7 text-white" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
@@ -45,17 +47,25 @@
                                 <line x1="3" y1="10" x2="21" y2="10"></line>
                             </svg>
                         </div>
-                        <span class="text-primary-100 font-bold text-sm">{{ \Carbon\Carbon::now()->translatedFormat('d M Y') }}</span>
+                        <span class="text-primary-100 font-black text-sm tracking-widest">{{ \Carbon\Carbon::now()->translatedFormat('d M Y') }}</span>
                     </div>
+
+                    @php
+                        // Cek apakah hari ini hari Senin (1 = Senin, menurut standar ISO)
+                        $isMonday = \Carbon\Carbon::now()->isMonday();
+                        
+                        // Pilih jam berdasarkan hari
+                        $todayHours = $isMonday ? ($jamOperasional['senin'] ?? 'Tutup') : ($jamOperasional['selasa_minggu'] ?? 'Tutup');
+                    @endphp
+
                     <div>
-                        <p class="text-primary-100/70 text-sm font-medium mb-1">Jam Operasional Hari Ini</p>
-                        <p class="text-2xl font-extrabold text-white">
-                            {{ \Carbon\Carbon::now()->isMonday() ? '12:00 - 17:15' : '07:00 - 17:15' }} <span class="text-sm font-normal text-sky-300">WIB</span>
+                        <p class="text-primary-100/80 text-sm font-medium mb-1">Jam Operasional Hari Ini</p>
+                        <p class="text-xl font-black text-white tracking-tight mb-6">
+                            {{ $todayHours }}
                         </p>
-                    </div>
-                    <div class="mt-8 pt-6 border-t border-white/10">
-                        <p class="text-primary-100/70 text-xs leading-relaxed">
-                            "Berolahraga dengan nyaman, sistem kami mencatat kepadatan pengunjung secara real-time untuk Anda."
+                        
+                        <p class="text-xs text-primary-100/80 leading-relaxed font-medium italic">
+                            Catatan : Jam operasional dapat berubah sewaktu-waktu. Pastikan untuk selalu memeriksa informasi terbaru sebelum berkunjung.
                         </p>
                     </div>
                 </div>
@@ -136,7 +146,7 @@
                 <h2 class="text-3xl md:text-4xl font-extrabold text-primary-950 tracking-tighter">Kabar Terbaru</h2>
                 <p class="text-gray-500 mt-2 text-lg">Informasi dan pengumuman seputar Kolam Selayang.</p>
             </div>
-            <a href="{{ route('news.index') }}" class="hidden sm:inline-flex items-center gap-2 bg-primary-50 text-primary-700 px-6 py-2.5 rounded-full text-sm font-bold hover:bg-primary-100 transition">
+            <a href="{{ route('news.index') }}" class="inline-flex w-full sm:w-auto justify-center items-center gap-2 bg-primary-50 text-primary-700 px-6 py-3.5 sm:py-2.5 rounded-full text-sm font-bold hover:bg-primary-100 transition mt-6 sm:mt-0 shadow-sm sm:shadow-none">
                 Lihat Semua Berita
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
             </a>

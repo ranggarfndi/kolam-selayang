@@ -43,16 +43,17 @@
                         <div class="flex justify-between items-center mb-2">
                             <span class="text-primary-400 text-xs font-bold uppercase tracking-widest">Senin</span>
                         </div>
-                        <p class="text-2xl font-black text-white">12.00 — 17.15 <span class="text-sm font-medium text-primary-400">WIB</span></p>
+                        <p class="text-xl lg:text-2xl font-black text-white">{{ $jamOperasional['senin'] ?? 'Tutup' }}</p>
                     </div>
                     <div class="bg-white/5 p-6 rounded-[2rem] border border-white/10 group hover:border-sky-500/50 hover:bg-white/10 transition-all duration-300">
                         <div class="flex justify-between items-center mb-2">
                             <span class="text-primary-400 text-xs font-bold uppercase tracking-widest">Selasa — Minggu</span>
                         </div>
-                        <p class="text-2xl font-black text-white">07.00 — 17.15 <span class="text-sm font-medium text-primary-400">WIB</span></p>
+                        <p class="text-xl lg:text-2xl font-black text-white">{{ $jamOperasional['selasa_minggu'] ?? 'Tutup' }}</p>
                     </div>
                 </div>
             </div>
+
         </div>
 
         <div class="pt-10 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-6 text-center md:text-left">

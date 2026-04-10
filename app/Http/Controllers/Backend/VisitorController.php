@@ -25,7 +25,7 @@ class VisitorController extends Controller
         // Kita tampilkan 15 log per halaman agar admin mudah memantau
         $logs = VisitorLog::whereDate('created_at', $today)
                             ->latest()
-                            ->paginate(15);
+                            ->paginate(5);
 
         return view('backend.visitors.index', compact(
             'logs', 'currentInside', 'todayRevenue', 'totalIn', 'totalOut'

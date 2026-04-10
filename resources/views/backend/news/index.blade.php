@@ -9,11 +9,11 @@
             <h1 class="text-3xl font-extrabold text-primary-950 tracking-tighter">Berita & Pengumuman</h1>
             <p class="text-gray-600 mt-1">Kelola berita yang akan tampil di halaman depan pengunjung.</p>
         </div>
-        <div class="flex gap-3">
-            <a href="{{ route('admin.dashboard') }}" class="bg-white border border-gray-200 text-gray-700 hover:bg-gray-50 px-4 py-2 rounded-xl text-sm font-bold transition shadow-sm">
+        <div class="flex flex-col sm:flex-row gap-3">
+            <a href="{{ route('admin.dashboard') }}" class="text-center sm:text-left bg-white border border-gray-200 text-gray-700 hover:bg-gray-50 px-4 py-3 sm:py-2 rounded-xl text-sm font-bold transition shadow-sm">
                 &larr; Kembali
             </a>
-            <a href="{{ route('admin.news.create') }}" class="bg-primary-700 hover:bg-primary-800 text-white px-5 py-2 rounded-xl text-sm font-bold shadow-sm transition inline-flex items-center gap-2">
+            <a href="{{ route('admin.news.create') }}" class="justify-center sm:justify-start bg-primary-700 hover:bg-primary-800 text-white px-5 py-3 sm:py-2 rounded-xl text-sm font-bold shadow-sm transition inline-flex items-center gap-2">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
                 Tulis Berita
             </a>
@@ -28,7 +28,8 @@
     @endif
 
     <div class="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
-        <div class="overflow-x-auto">
+        
+        <div class="hidden md:block overflow-x-auto">
             <table class="w-full text-left border-collapse">
                 <thead>
                     <tr class="bg-gray-50 border-b border-gray-100 text-sm text-gray-500">
@@ -51,7 +52,6 @@
                         </td>
                         <td class="py-4 px-6 text-right space-x-2">
                             <a href="{{ route('admin.news.edit', $item->id) }}" class="inline-block bg-yellow-100 hover:bg-yellow-200 text-yellow-700 px-3 py-1.5 rounded-lg text-xs font-bold transition">Edit</a>
-                            
                             <form action="{{ route('admin.news.destroy', $item->id) }}" method="POST" class="inline-block" onsubmit="return confirm('Yakin ingin menghapus berita ini?');">
                                 @csrf @method('DELETE')
                                 <button type="submit" class="bg-red-100 hover:bg-red-200 text-red-700 px-3 py-1.5 rounded-lg text-xs font-bold transition">Hapus</button>
@@ -66,6 +66,32 @@
                 </tbody>
             </table>
         </div>
+
+        <div class="md:hidden divide-y divide-gray-100">
+            @forelse($news as $item)
+            <div class="p-5 flex flex-col gap-3">
+                <div class="flex gap-4 items-start">
+                    <img src="{{ asset('storage/' . $item->thumbnail) }}" alt="Thumbnail" class="w-20 h-16 object-cover rounded-lg border border-gray-200 shrink-0">
+                    <div>
+                        <h3 class="font-bold text-gray-900 leading-tight mb-1">{{ $item->title }}</h3>
+                        <p class="text-xs text-gray-500">{{ $item->author->name }} • {{ $item->published_at->translatedFormat('d M Y') }}</p>
+                    </div>
+                </div>
+                <div class="flex gap-2 justify-end mt-2">
+                    <a href="{{ route('admin.news.edit', $item->id) }}" class="flex-1 text-center bg-yellow-50 hover:bg-yellow-100 text-yellow-700 px-4 py-2 rounded-xl text-xs font-bold transition border border-yellow-100">Edit Berita</a>
+                    <form action="{{ route('admin.news.destroy', $item->id) }}" method="POST" class="flex-1" onsubmit="return confirm('Yakin ingin menghapus berita ini?');">
+                        @csrf @method('DELETE')
+                        <button type="submit" class="w-full bg-red-50 hover:bg-red-100 text-red-700 px-4 py-2 rounded-xl text-xs font-bold transition border border-red-100">Hapus</button>
+                    </form>
+                </div>
+            </div>
+            @empty
+            <div class="py-10 text-center text-gray-500">
+                Belum ada berita yang diterbitkan.
+            </div>
+            @endforelse
+        </div>
+
         <div class="px-6 py-6 border-t border-gray-50">
             {{ $news->links('layouts.partials.pagination') }}
         </div>

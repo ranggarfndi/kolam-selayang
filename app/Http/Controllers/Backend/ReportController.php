@@ -23,7 +23,7 @@ class ReportController extends Controller
 
         // 3. Ambil data untuk TABEL (Dengan Paginate)
         // Kita gunakan 10 atau 31 (sebulan) agar rapi
-        $reports = $this->getReportData($startDate, $endDate)->paginate(15)->withQueryString();
+        $reports = $this->getReportData($startDate, $endDate)->paginate(5)->withQueryString();
 
         return view('backend.reports.index', compact('reports', 'startDate', 'endDate', 'totalVisitors', 'totalRevenue'));
     }
