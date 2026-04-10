@@ -25,4 +25,8 @@ Route::middleware('auth')->prefix('admin')->group(function () {
     Route::post('/pools/{pool}/status', [App\Http\Controllers\Backend\PoolController::class, 'updateStatus'])->name('admin.pools.status');
     Route::post('/pools/bulk-status', [App\Http\Controllers\Backend\PoolController::class, 'bulkUpdateStatus'])->name('admin.pools.bulk');
     Route::post('/settings/hours', [App\Http\Controllers\Backend\PoolController::class, 'updateHours'])->name('admin.settings.hours');
+
+    // Modul Pengunjung
+    Route::get('/visitors', [App\Http\Controllers\Backend\VisitorController::class, 'index'])->name('admin.visitors');
+    Route::post('/visitors', [App\Http\Controllers\Backend\VisitorController::class, 'store'])->name('admin.visitors.store');
 });
