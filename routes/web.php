@@ -33,4 +33,12 @@ Route::middleware('auth')->prefix('admin')->group(function () {
     // Modul Laporan
     Route::get('/reports', [App\Http\Controllers\Backend\ReportController::class, 'index'])->name('admin.reports');
     Route::get('/reports/export', [App\Http\Controllers\Backend\ReportController::class, 'exportCsv'])->name('admin.reports.export');
+
+    // Modul Berita
+    Route::get('/news', [App\Http\Controllers\Backend\NewsController::class, 'index'])->name('admin.news.index');
+    Route::get('/news/create', [App\Http\Controllers\Backend\NewsController::class, 'create'])->name('admin.news.create');
+    Route::post('/news', [App\Http\Controllers\Backend\NewsController::class, 'store'])->name('admin.news.store');
+    Route::get('/news/{news}/edit', [App\Http\Controllers\Backend\NewsController::class, 'edit'])->name('admin.news.edit');
+    Route::put('/news/{news}', [App\Http\Controllers\Backend\NewsController::class, 'update'])->name('admin.news.update');
+    Route::delete('/news/{news}', [App\Http\Controllers\Backend\NewsController::class, 'destroy'])->name('admin.news.destroy');
 });

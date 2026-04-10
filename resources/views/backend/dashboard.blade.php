@@ -50,15 +50,15 @@
             </div>
         </a>
         
-        <div class="bg-white p-8 rounded-3xl shadow-sm border border-gray-100 flex items-start gap-5 hover:border-primary-100 transition cursor-pointer">
-            <div class="p-3.5 bg-primary-100 text-primary-700 rounded-2xl">
+        <a href="{{ route('admin.news.index') }}" class="bg-white p-8 rounded-3xl shadow-sm border border-gray-100 flex items-start gap-5 hover:border-primary-300 hover:shadow-md transition cursor-pointer group">
+            <div class="p-3.5 bg-primary-100 text-primary-700 rounded-2xl group-hover:bg-primary-600 group-hover:text-white transition">
                 <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"></path></svg>
             </div>
             <div>
                 <p class="text-gray-600 text-sm font-medium">Berita Terbaru</p>
-                <p class="text-xl font-bold text-gray-900 mt-1">Terbitkan</p>
+                <p class="text-xl font-bold text-gray-900 mt-1">Kelola Berita &rarr;</p>
             </div>
-        </div>
+        </a>
 
     </div>
 
