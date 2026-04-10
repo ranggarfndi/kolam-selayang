@@ -15,7 +15,14 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 // Grup Admin (Harus Login)
 Route::middleware('auth')->prefix('admin')->group(function () {
+    
     Route::get('/dashboard', function () {
         return view('backend.dashboard');
     })->name('admin.dashboard');
+
+    // Modul Kolam & Pengaturan
+    Route::get('/pools', [App\Http\Controllers\Backend\PoolController::class, 'index'])->name('admin.pools');
+    Route::post('/pools/{pool}/status', [App\Http\Controllers\Backend\PoolController::class, 'updateStatus'])->name('admin.pools.status');
+    Route::post('/pools/bulk-status', [App\Http\Controllers\Backend\PoolController::class, 'bulkUpdateStatus'])->name('admin.pools.bulk');
+    Route::post('/settings/hours', [App\Http\Controllers\Backend\PoolController::class, 'updateHours'])->name('admin.settings.hours');
 });
