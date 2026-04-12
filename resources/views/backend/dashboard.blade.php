@@ -2,7 +2,7 @@
 @section('title', 'Dashboard Utama Administrator - Kolam Selayang')
 
 @section('content')
-<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 md:py-16">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 md:py-24">
     
     <div class="bg-primary-950 p-8 md:p-12 rounded-[2.5rem] shadow-2xl shadow-primary-900/20 mb-10 relative overflow-hidden">
         <div class="absolute top-0 right-0 w-64 h-64 bg-primary-800 rounded-full blur-3xl opacity-20 -translate-y-1/2 translate-x-1/2"></div>

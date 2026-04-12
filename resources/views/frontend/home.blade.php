@@ -10,11 +10,7 @@
         <div class="absolute top-0 right-0 w-[40rem] h-[40rem] bg-gradient-to-br from-sky-400/20 to-primary-600/20 rounded-full blur-[100px] pointer-events-none transform translate-x-1/3 -translate-y-1/3"></div>
 
         <div class="relative z-10 flex flex-col lg:flex-row items-center gap-12 p-10 md:p-16 lg:p-20">
-            <div class="w-full lg:w-3/5 text-center lg:text-left">
-                <div class="inline-flex items-center gap-2 py-2 px-5 rounded-full bg-white/5 border border-white/10 text-sky-300 text-xs font-bold tracking-widest uppercase backdrop-blur-sm mb-8">
-                    Selamat Datang di
-                </div>
-                
+            <div class="w-full lg:w-3/5 text-center lg:text-left">               
                 <h1 class="text-5xl md:text-6xl lg:text-7xl font-extrabold text-white tracking-tighter mb-6 leading-[1.1]">
                     Kolam Renang <span class="text-transparent bg-clip-text bg-sky-400">Selayang</span>
                 </h1>
@@ -24,7 +20,7 @@
                 </p>
                 
                 <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4">
-                    <a href="#status" class="w-full sm:w-auto bg-white text-primary-950 px-8 py-4 rounded-2xl font-bold shadow-xl shadow-white/10 hover:shadow-2xl hover:-translate-y-1 transition-all duration-300">
+                    <a href="#status" class="w-full sm:w-auto bg-white text-primary-950 px-8 py-4 rounded-2xl font-bold shadow-xl shadow-white/10 hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 border border-white">
                         Cek Status Kolam
                     </a>
                     <a href="{{ route('news.index') }}" class="w-full sm:w-auto bg-transparent text-white border border-white/20 px-8 py-4 rounded-2xl font-bold hover:bg-white/10 transition-all duration-300">
@@ -36,7 +32,7 @@
             <div class="w-full lg:w-2/5 lg:flex justify-center relative">
                 <div class="absolute inset-0 bg-gradient-to-tr from-sky-400 to-primary-500 rounded-[2.5rem] blur-xl opacity-20 group-hover:opacity-40 transition duration-700"></div>
                 
-                <div class="relative bg-white/10 backdrop-blur-2xl border border-white/20 p-8 rounded-[2.5rem] shadow-2xl">
+                <div class="relative bg-white/10 backdrop-blur-2xl border border-white/20 p-8 rounded-[2.5rem] shadow-2xl w-full">
                     
                     <div class="flex justify-between items-center mb-8">
                         <div class="w-14 h-14 rounded-full bg-gradient-to-br from-sky-400 to-primary-600 flex items-center justify-center shadow-lg shadow-sky-500/20">
@@ -51,94 +47,158 @@
                     </div>
 
                     @php
-                        // Cek apakah hari ini hari Senin (1 = Senin, menurut standar ISO)
+                        // Data dasar
                         $isMonday = \Carbon\Carbon::now()->isMonday();
-                        
-                        // Pilih jam berdasarkan hari
                         $todayHours = $isMonday ? ($jamOperasional['senin'] ?? 'Tutup') : ($jamOperasional['selasa_minggu'] ?? 'Tutup');
+
+                        $total = $pools->count();
+                        $open = $pools->where('status', 'Buka')->count();
+                        $cleaning = $pools->where('status', 'Pembersihan')->count();
+                        $closed = $pools->where('status', 'Tutup')->count();
+
+                        // Penentuan Status Teks & Warna
+                        if ($open == $total) {
+                            // Skenario: Buka Semua
+                            $displayStatus = 'Buka';
+                            $statusColor = 'text-green-400';
+                            $dotColor = 'bg-green-400';
+                        } elseif ($cleaning == $total) {
+                            // Skenario: Pembersihan Semua
+                            $displayStatus = 'Pembersihan Semua Kolam';
+                            $statusColor = 'text-yellow-400';
+                            $dotColor = 'bg-yellow-400';
+                        } elseif ($closed == $total) {
+                            // Skenario: Tutup Semua
+                            $displayStatus = 'Tutup';
+                            $statusColor = 'text-red-500';
+                            $dotColor = 'bg-red-500';
+                        } elseif ($open > 0 && $cleaning > 0) {
+                            // Skenario: Campuran Buka & Pembersihan (Apapun posisinya)
+                            $cleaningName = $pools->where('status', 'Pembersihan')->first()->name;
+                            $displayStatus = "Buka namun kolam $cleaningName sedang pembersihan";
+                            $statusColor = 'text-yellow-400';
+                            $dotColor = 'bg-yellow-400';
+                        } elseif ($open > 0 && $closed > 0) {
+                            // Skenario: Campuran Buka & Tutup
+                            $closedName = $pools->where('status', 'Tutup')->first()->name;
+                            $displayStatus = "Buka namun kolam $closedName tutup";
+                            $statusColor = 'text-sky-400';
+                            $dotColor = 'bg-sky-400';
+                        } else {
+                            // Skenario sisa: Misal Pembersihan & Tutup
+                            $displayStatus = 'Operasional Terbatas';
+                            $statusColor = 'text-orange-400';
+                            $dotColor = 'bg-orange-400';
+                        }
                     @endphp
 
-                    <div>
-                        <p class="text-primary-100/80 text-sm font-medium mb-1">Jam Operasional Hari Ini</p>
-                        <p class="text-xl font-black text-white tracking-tight mb-6">
-                            {{ $todayHours }}
-                        </p>
-                        
-                        <p class="text-xs text-primary-100/80 leading-relaxed font-medium italic">
-                            Catatan : Jam operasional dapat berubah sewaktu-waktu. Pastikan untuk selalu memeriksa informasi terbaru sebelum berkunjung.
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 md:gap-8 mb-20 md:mb-32" id="status">
-        <div class="lg:col-span-1 bg-gradient-to-br from-sky-400 to-primary-600 rounded-[2.5rem] p-10 text-white relative overflow-hidden group shadow-lg shadow-primary-500/20">
-            <div class="absolute top-0 right-0 p-8 opacity-10 group-hover:scale-125 transition-transform duration-700 pointer-events-none">
-                <svg class="w-40 h-40" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2c0 0-8 6-8 12a8 8 0 0016 0c0-6-8-12-8-12zm0 18a6 6 0 01-6-6c0-4.08 4.63-8.45 6-9.75 1.37 1.3 6 5.67 6 9.75a6 6 0 01-6 6z"/></svg>
-            </div>
-            <div class="relative z-10 h-full flex flex-col justify-between min-h-[200px]">
-                <div>
-                    <h3 class="text-primary-100 font-semibold text-lg mb-1">Saat Ini Di Dalam</h3>
-                    <p class="text-primary-100/80 text-sm">Update Real-time Hari Ini</p>
-                </div>
-                <div class="mt-8 flex items-baseline gap-2">
-                    <span class="text-7xl font-black tracking-tighter leading-none">{{ $currentInside }}</span>
-                    <span class="text-xl font-medium opacity-90">Orang</span>
-                </div>
-                <div class="mt-8 inline-flex items-center gap-2 bg-white/20 backdrop-blur-md px-4 py-2 rounded-full text-xs font-bold w-fit">
-                    <span class="w-2.5 h-2.5 rounded-full bg-green-400 animate-pulse shadow-[0_0_8px_rgba(74,222,128,0.8)]"></span> Terhubung ke Sistem
-                </div>
-            </div>
-        </div>
-
-        <div class="lg:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-6 md:gap-8">
-            @foreach($pools as $pool)
-            <div class="bg-white rounded-[2.5rem] p-8 md:p-10 border border-gray-100 shadow-sm hover:shadow-2xl hover:-translate-y-2 hover:border-primary-100 transition-all duration-500 group flex flex-col justify-between relative overflow-hidden">
-                
-                <div class="absolute -top-10 -right-10 w-32 h-32 rounded-full blur-3xl opacity-10 
-                    {{ $pool->status == 'Buka' ? 'bg-green-500' : ($pool->status == 'Pembersihan' ? 'bg-yellow-500' : 'bg-red-500') }}">
-                </div>
-
-                <div>
-                    <div class="flex justify-between items-center mb-8 relative z-10">
-                        <div class="p-4 bg-gray-50 text-gray-400 rounded-2xl group-hover:bg-primary-600 group-hover:text-white transition-all duration-500 shadow-inner">
-                            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 14.5A2.5 2.5 0 006.5 17h11a2.5 2.5 0 002.5-2.5m-16 0A2.5 2.5 0 016.5 12h11a2.5 2.5 0 012.5 2.5m-16 0V7a2 2 0 012-2h12a2 2 0 012 2v7.5M8 9h8"></path></svg>
+                    <div class="space-y-6">
+                        <div>
+                            <p class="text-primary-100/80 text-sm font-medium mb-1">Jam Operasional Hari Ini</p>
+                            <p class="text-xl font-black text-white tracking-tight">
+                                {{ $todayHours }}
+                            </p>
                         </div>
 
-                        @if($pool->status == 'Buka')
-                            <span class="bg-green-500 text-white px-6 py-2 rounded-2xl text-sm font-black tracking-widest uppercase shadow-lg shadow-green-500/30 flex items-center gap-2">
-                                <span class="w-2 h-2 rounded-full bg-white animate-pulse"></span>
-                                BUKA
-                            </span>
-                        @elseif($pool->status == 'Pembersihan')
-                            <span class="bg-yellow-400 text-yellow-950 px-6 py-2 rounded-2xl text-sm font-black tracking-widest uppercase shadow-lg shadow-yellow-400/30 flex items-center gap-2">
-                                <svg class="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
-                                PEMBERSIHAN
-                            </span>
-                        @else
-                            <span class="bg-red-500 text-white px-6 py-2 rounded-2xl text-sm font-black tracking-widest uppercase shadow-lg shadow-red-500/30">
-                                TUTUP
-                            </span>
-                        @endif
+                        <div class="pt-5 border-t border-white/10">
+                            <p class="text-primary-100/80 text-sm font-medium mb-2">Status Kolam</p>
+                            <div class="flex items-start gap-3">
+                                <span class="relative flex h-3 w-3 mt-1.5 shrink-0">
+                                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full {{ $dotColor }} opacity-75"></span>
+                                    <span class="relative inline-flex rounded-full h-3 w-3 {{ $dotColor }}"></span>
+                                </span>
+                                <p class="text-lg font-bold {{ $statusColor }} leading-tight tracking-tight">
+                                    {{ $displayStatus }}
+                                </p>
+                            </div>
+                        </div>
+                        
+                        <p class="text-[11px] text-primary-100/50 leading-relaxed font-medium italic">
+                            Catatan: Status diperbarui secara otomatis oleh sistem pusat Kolam Selayang.
+                        </p>
                     </div>
-
-                    <h3 class="text-3xl font-black text-primary-950 mb-2 tracking-tighter group-hover:text-primary-600 transition-colors">{{ $pool->name }}</h3>
-                    <p class="text-gray-400 text-sm font-bold uppercase tracking-widest flex items-center gap-2">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path></svg>
-                        Kedalaman: <span class="text-gray-900">{{ $pool->depth_info }}</span>
-                    </p>
-                </div>
-
-                <div class="relative w-full h-1.5 bg-gray-100 mt-10 rounded-full overflow-hidden">
-                    <div class="absolute top-0 left-0 h-full bg-primary-500 w-0 group-hover:w-full transition-all duration-700 ease-in-out"></div>
                 </div>
             </div>
-            @endforeach
-
         </div>
     </div>
+
+    <section class="pt-10 pb-20 md:pt-16 md:pb-32 -mx-4 sm:-mx-6 lg:-mx-8 px-4 sm:px-6 lg:px-8 -mt-12 md:-mt-20 relative z-10">
+        <div class="max-w-7xl mx-auto">
+            
+            <div class="mb-10">
+                <h2 class="text-4xl md:text-5xl font-black text-primary-950 tracking-tighter mb-4">Status Kolam</h2>
+                <p class="text-gray-600 max-w-2xl font-medium">Pantau kepadatan pengunjung dan status operasional setiap area kolam secara real-time.</p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 md:gap-8" id="status">
+                
+                <div class="lg:col-span-1 bg-gradient-to-br from-sky-400 to-primary-600 rounded-[2.5rem] p-10 text-white relative overflow-hidden group shadow-lg shadow-primary-500/20">
+                    <div class="absolute top-0 right-0 p-8 opacity-10 group-hover:scale-125 transition-transform duration-700 pointer-events-none">
+                        <svg class="w-40 h-40" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2c0 0-8 6-8 12a8 8 0 0016 0c0-6-8-12-8-12zm0 18a6 6 0 01-6-6c0-4.08 4.63-8.45 6-9.75 1.37 1.3 6 5.67 6 9.75a6 6 0 01-6 6z"/></svg>
+                    </div>
+                    <div class="relative z-10 h-full flex flex-col justify-between min-h-[200px]">
+                        <div>
+                            <h3 class="text-primary-100 font-semibold text-lg mb-1">Saat Ini Di Dalam</h3>
+                            <p class="text-primary-100/80 text-sm">Update Real-time Hari Ini</p>
+                        </div>
+                        <div class="mt-8 flex items-baseline gap-2">
+                            <span class="text-7xl font-black tracking-tighter leading-none">{{ $currentInside }}</span>
+                            <span class="text-xl font-medium opacity-90">Orang</span>
+                        </div>
+                        <div class="mt-8 inline-flex items-center gap-2 bg-white/20 backdrop-blur-md px-4 py-2 rounded-full text-xs font-bold w-fit">
+                            <span class="w-2.5 h-2.5 rounded-full bg-green-400 animate-pulse shadow-[0_0_8px_rgba(74,222,128,0.8)]"></span> Terhubung ke Sistem
+                        </div>
+                    </div>
+                </div>
+
+                <div class="lg:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-6 md:gap-8">
+                    @foreach($pools as $pool)
+                    <div class="bg-white border border-gray-100 md:p-10 p-8 rounded-[2.5rem] shadow-sm hover:shadow-2xl hover:-translate-y-2 hover:border-primary-100 transition-all duration-500 group flex flex-col justify-between relative overflow-hidden">
+                        
+                        <div class="absolute -top-10 -right-10 w-32 h-32 rounded-full blur-3xl opacity-10 
+                            {{ $pool->status == 'Buka' ? 'bg-green-500' : ($pool->status == 'Pembersihan' ? 'bg-yellow-500' : 'bg-red-500') }}">
+                        </div>
+
+                        <div>
+                            <div class="flex justify-between items-center mb-8 relative z-10">
+                                <div class="p-4 bg-gray-50 text-gray-400 rounded-2xl group-hover:bg-primary-600 group-hover:text-white transition-all duration-500 shadow-inner">
+                                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 14.5A2.5 2.5 0 006.5 17h11a2.5 2.5 0 002.5-2.5m-16 0A2.5 2.5 0 016.5 12h11a2.5 2.5 0 012.5 2.5m-16 0V7a2 2 0 012-2h12a2 2 0 012 2v7.5M8 9h8"></path></svg>
+                                </div>
+
+                                @if($pool->status == 'Buka')
+                                    <span class="bg-green-500 text-white px-6 py-2 rounded-2xl text-sm font-black tracking-widest uppercase shadow-lg shadow-green-500/30 flex items-center gap-2">
+                                        <span class="w-1.5 h-1.5 rounded-full bg-white animate-pulse"></span>
+                                        BUKA
+                                    </span>
+                                @elseif($pool->status == 'Pembersihan')
+                                    <span class="bg-yellow-400 text-yellow-950 px-6 py-2 rounded-2xl text-sm font-black tracking-widest uppercase shadow-lg shadow-yellow-400/30 flex items-center gap-2">
+                                        <svg class="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+                                        PEMBERSIHAN
+                                    </span>
+                                @else
+                                    <span class="bg-red-500 text-white px-6 py-2 rounded-2xl text-sm font-black tracking-widest uppercase shadow-lg shadow-red-500/30">
+                                        TUTUP
+                                    </span>
+                                @endif
+                            </div>
+
+                            <h3 class="text-3xl font-black text-primary-950 mb-2 tracking-tighter group-hover:text-primary-600 transition-colors">{{ $pool->name }}</h3>
+                            <p class="text-gray-400 text-sm font-bold uppercase tracking-widest flex items-center gap-2">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path></svg>
+                                Kedalaman: <span class="text-gray-900">{{ $pool->depth_info }}</span>
+                            </p>
+                        </div>
+
+                        <div class="relative w-full h-1.5 bg-gray-100 mt-10 rounded-full overflow-hidden">
+                            <div class="absolute top-0 left-0 h-full bg-primary-500 w-0 group-hover:w-full transition-all duration-700 ease-in-out"></div>
+                        </div>
+                    </div>
+                    @endforeach
+                </div>
+
+            </div>
+        </div>
+    </section>
 
     <div id="berita" class="mb-10">
         <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-10">
@@ -182,4 +242,5 @@
             </div>
         @endif
     </div>
+
 </div> @endsection
